@@ -32,6 +32,25 @@ public class ReservaService {
             throw new RuntimeException("Sala no existe");
         }
 
+        if (dto.horaFin().isBefore(dto.horaInicio())
+                || dto.horaFin().equals(dto.horaInicio())) {
+
+            throw new RuntimeException(
+                    "Hora fin debe ser mayor a hora inicio"
+            );
+        }
+        boolean existeCruce = reservaRepository.existeCruceHorario(
+                dto.salaId(),
+                dto.fecha(),
+                dto.horaInicio(),
+                dto.horaFin()
+        );
+
+        if (existeCruce) {
+            throw new RuntimeException(
+                    "La sala ya esta reservada en ese horario"
+            );
+        }
         Reserva reserva = ReservaMapper.toModel(null, dto);
 
         reserva.setEstado("PENDIENTE");

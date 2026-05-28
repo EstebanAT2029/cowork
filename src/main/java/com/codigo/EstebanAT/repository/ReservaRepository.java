@@ -62,4 +62,22 @@ public class ReservaRepository {
 
         reservas.removeIf(r -> r.getId().equals(id));
     }
+    public boolean existeCruceHorario(
+            Long salaId,
+            java.time.LocalDate fecha,
+            java.time.LocalTime inicio,
+            java.time.LocalTime fin
+    ) {
+        return reservas.stream().anyMatch(r ->
+
+                r.getSalaId().equals(salaId)
+                        && r.getFecha().equals(fecha)
+                        &&
+                        (
+                            inicio.isBefore(r.getHoraFin())
+                            &&
+                            fin.isAfter(r.getHoraInicio())
+                        )
+        );
+    }
 }

@@ -74,6 +74,14 @@ public class SalaService {
 
     public void eliminar(Long id) {
 
-        salaRepository.delete(id);
+        Sala sala = salaRepository.findById(id);
+
+        if (sala == null) {
+            throw new RuntimeException("Sala no encontrada");
+        }
+
+        sala.setActiva(false);
+
+        salaRepository.save(sala);
     }
 }
