@@ -67,7 +67,9 @@ public class SalaService {
             sala.setActiva(dto.activa());
         }
 
-        return SalaMapper.toDTO(sala);
+        Sala actualizada = salaRepository.save(sala);
+
+        return SalaMapper.toDTO(actualizada);
     }
 
     public void eliminar(Long id) {

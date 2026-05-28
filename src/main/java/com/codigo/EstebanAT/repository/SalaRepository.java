@@ -21,10 +21,17 @@ public class SalaRepository {
     public Sala save(Sala sala) {
 
         if (sala.getId() == null) {
-            sala.setId(counter.getAndIncrement());
-        }
 
-        salas.add(sala);
+            sala.setId(counter.getAndIncrement());
+
+            salas.add(sala);
+
+        } else {
+
+            salas.removeIf(s -> s.getId().equals(sala.getId()));
+
+            salas.add(sala);
+        }
 
         return sala;
     }

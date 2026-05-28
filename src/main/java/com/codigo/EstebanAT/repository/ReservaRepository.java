@@ -21,10 +21,17 @@ public class ReservaRepository {
     public Reserva save(Reserva reserva) {
 
         if (reserva.getId() == null) {
-            reserva.setId(counter.getAndIncrement());
-        }
 
-        reservas.add(reserva);
+            reserva.setId(counter.getAndIncrement());
+
+            reservas.add(reserva);
+
+        } else {
+
+            reservas.removeIf(r -> r.getId().equals(reserva.getId()));
+
+            reservas.add(reserva);
+        }
 
         return reserva;
     }
