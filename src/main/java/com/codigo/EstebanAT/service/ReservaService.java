@@ -5,7 +5,9 @@ import com.codigo.EstebanAT.dto.ReservaResponseDTO;
 import com.codigo.EstebanAT.mapper.ReservaMapper;
 import com.codigo.EstebanAT.model.Reserva;
 import com.codigo.EstebanAT.repository.ReservaRepository;
+import com.codigo.EstebanAT.repository.SalaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,12 +15,22 @@ import java.util.List;
 public class ReservaService {
 
     private final ReservaRepository reservaRepository;
+    private final SalaRepository salaRepository;
 
-    public ReservaService(ReservaRepository reservaRepository) {
+    public ReservaService(
+            ReservaRepository reservaRepository,
+            SalaRepository salaRepository
+    ) {
+
         this.reservaRepository = reservaRepository;
+        this.salaRepository = salaRepository;
     }
 
     public ReservaResponseDTO crear(ReservaRequestDTO dto) {
+
+        if (salaRepository.findById(dto.salaId()) == null) {
+            throw new RuntimeException("Sala no existe");
+        }
 
         Reserva reserva = ReservaMapper.toModel(null, dto);
 
@@ -29,6 +41,14 @@ public class ReservaService {
         Reserva guardada = reservaRepository.save(reserva);
 
         return ReservaMapper.toDTO(guardada);
+    }
+
+    public List<ReservaResponseDTO> listar() {
+
+        return reservaRepository.findAll()
+                .stream()
+                .map(ReservaMapper::toDTO)
+                .toList();
     }
 
     public ReservaResponseDTO obtener(Long id) {
@@ -42,12 +62,53 @@ public class ReservaService {
         return ReservaMapper.toDTO(reserva);
     }
 
-    public List<ReservaResponseDTO> listar() {
+    public List<ReservaResponseDTO> listarPorSala(Long salaId) {
 
-        return reservaRepository.findAll()
+        return reservaRepository.findBySalaId(salaId)
                 .stream()
                 .map(ReservaMapper::toDTO)
                 .toList();
+    }
+
+    public List<ReservaResponseDTO> listarPorEstado(String estado) {
+
+        return reservaRepository.findByEstado(estado)
+                .stream()
+                .map(ReservaMapper::toDTO)
+                .toList();
+    }
+
+    public ReservaResponseDTO cambiarEstado(
+            Long id,
+            String estado
+    ) {
+
+        Reserva reserva = reservaRepository.findById(id);
+
+        if (reserva == null) {
+            throw new RuntimeException("Reserva no encontrada");
+        }
+
+        reserva.setEstado(estado);
+
+        Reserva actualizada = reservaRepository.save(reserva);
+
+        return ReservaMapper.toDTO(actualizada);
+    }
+
+    public String subirArchivo(
+            Long id,
+            MultipartFile file
+    ) {
+
+        Reserva reserva = reservaRepository.findById(id);
+
+        if (reserva == null) {
+            throw new RuntimeException("Reserva no encontrada");
+        }
+
+        return "Archivo recibido: "
+                + file.getOriginalFilename();
     }
 
     public void eliminar(Long id) {

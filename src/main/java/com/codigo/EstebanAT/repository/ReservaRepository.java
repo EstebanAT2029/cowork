@@ -44,6 +44,20 @@ public class ReservaRepository {
                 .orElse(null);
     }
 
+    public List<Reserva> findBySalaId(Long salaId) {
+
+        return reservas.stream()
+                .filter(r -> r.getSalaId().equals(salaId))
+                .toList();
+    }
+
+    public List<Reserva> findByEstado(String estado) {
+
+        return reservas.stream()
+                .filter(r -> r.getEstado().equalsIgnoreCase(estado))
+                .toList();
+    }
+
     public void delete(Long id) {
 
         reservas.removeIf(r -> r.getId().equals(id));
