@@ -3,6 +3,7 @@ package com.codigo.EstebanAT.controller;
 import com.codigo.EstebanAT.dto.SalaRequestDTO;
 import com.codigo.EstebanAT.dto.SalaResponseDTO;
 import com.codigo.EstebanAT.service.SalaService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class SalaController {
 
     @PostMapping
     public ResponseEntity<SalaResponseDTO> crear(
-            @RequestBody SalaRequestDTO dto
+            @Valid @RequestBody SalaRequestDTO dto
     ) {
 
         SalaResponseDTO respuesta = salaService.crear(dto);
@@ -45,7 +46,7 @@ public class SalaController {
     @PutMapping("/{id}")
     public SalaResponseDTO actualizar(
             @PathVariable Long id,
-            @RequestBody SalaRequestDTO dto
+            @Valid @RequestBody SalaRequestDTO dto
     ) {
 
         return salaService.actualizar(id, dto);

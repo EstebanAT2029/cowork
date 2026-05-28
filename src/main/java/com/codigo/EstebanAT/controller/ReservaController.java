@@ -3,6 +3,7 @@ package com.codigo.EstebanAT.controller;
 import com.codigo.EstebanAT.dto.ReservaRequestDTO;
 import com.codigo.EstebanAT.dto.ReservaResponseDTO;
 import com.codigo.EstebanAT.service.ReservaService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class ReservaController {
 
     @PostMapping
     public ResponseEntity<ReservaResponseDTO> crear(
-            @RequestBody ReservaRequestDTO dto
+            @Valid @RequestBody ReservaRequestDTO dto
     ) {
 
         return ResponseEntity
