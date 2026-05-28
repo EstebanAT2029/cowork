@@ -6,7 +6,7 @@ Proyecto desarrollado para el curso de Java FullStack Modulo 3 - TECSUP.
 
 ---
 
-## 🛠️ Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 ### Backend
 - Java 17
